@@ -1,0 +1,40 @@
+﻿<Window x:Class="marktplaatsreposter.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:marktplaatsreposter"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Border Padding="10">
+        <StackPanel>
+            <TextBlock Text="E-Mail" />
+            <TextBlock Text="Adverts" Margin="0 10 0 10"/>
+            <Border BorderThickness="1" BorderBrush="Black">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Advert title"/>
+                        <TextBlock Grid.Column="1" Text="Status"/>
+                        <TextBlock Grid.Column="2" Text="Repost"/>
+                    </Grid>
+                    <Grid>
+                    </Grid>
+                </StackPanel>
+            </Border>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Margin="20 10" Grid.Column="1" Content="Refresh" MouseUp="Refresh_MouseUp"/>
+                <Button Margin="20 10" Grid.Column="2" Content="Repost" MouseUp="Repost_MouseUp"/>
+            </Grid>
+        </StackPanel>
+    </Border>
+</Window>
