@@ -370,6 +370,7 @@ namespace marktplaatsreposter
             var adElements = adListingTable.FindElements(By.ClassName("ad-listing"));
             foreach(var adElement in adElements)
             {
+                driver.ScrollToElement(adElement);
                 string title = adElement.FindElement(By.CssSelector(".description-title .title")).Text;
                 string status = adElement.FindElement(By.ClassName("listing-status")).Text;
                 string views = adElement.FindElement(By.ClassName("amount")).Text;
