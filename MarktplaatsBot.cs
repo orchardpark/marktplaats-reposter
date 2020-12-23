@@ -118,9 +118,16 @@ namespace marktplaatsreposter
 
         private void CheckSignedIn()
         {
+            if (isSignedIn) return;
             driver.Navigate().GoToUrl(markpltaatsBasePath);
-            var loginElement = driver.FindElement(By.CssSelector("a[data-role=login]"));
-            isSignedIn = loginElement == null;
+            try
+            {
+                var loginElement = driver.FindElement(By.CssSelector("a[data-role=login]"));
+                isSignedIn = loginElement == null;
+            } catch(NoSuchElementException e)
+            {
+                isSignedIn = true;
+            }
         }
 
         public void SignIn()
