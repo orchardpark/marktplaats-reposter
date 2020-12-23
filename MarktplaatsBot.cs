@@ -98,6 +98,9 @@ namespace marktplaatsreposter
 
         public MarktplaatsBot()
         {
+            var chromeDriverService = ChromeDriverService.CreateDefaultService("C:\\Chromedriver");
+            chromeDriverService.HideCommandPromptWindow = true;
+
             ChromeOptions options = new ChromeOptions();
             options.AddArgument("disable-infobars");
             options.AddExcludedArgument("enable-automation");
@@ -105,12 +108,12 @@ namespace marktplaatsreposter
             options.AddArgument("--disable-blink-features=AutomationControlled");
             options.AddArgument("window-size=1280,800");
             options.AddArgument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36");
-            driver = new ChromeDriver("C:\\Chromedriver", options);
+            driver = new ChromeDriver(chromeDriverService, options);
             driver.Manage().Window.Maximize();
         }
         ~MarktplaatsBot()
         {
-            driver.Close();
+            driver.Quit();
         }
 
         private void CheckSignedIn()
@@ -428,7 +431,7 @@ namespace marktplaatsreposter
 
         public void Terminate()
         {
-            driver.Close();
+            driver.Quit();
         }
     }
 }
