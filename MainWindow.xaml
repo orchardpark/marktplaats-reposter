@@ -5,24 +5,40 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:marktplaatsreposter"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Marktplaats Reposter" Height="450" Width="800"
+        Closing="Window_Closing"
+        >
     <Border Padding="10">
         <StackPanel>
-            <TextBlock Text="E-Mail" />
+            <Grid>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="E-Mail"/>
+                    <TextBox Width="100" x:Name="emailBox" KeyUp="emailBox_KeyUp"/>
+                    <Label Content="Password"/>
+                    <PasswordBox Width="100" x:Name="passwordBox" KeyUp="passwordBox_KeyUp"/>
+                    <Button Content="Sign In" Width="100" PreviewMouseLeftButtonUp="SignIn_MouseUp" x:Name="signInButton"/>
+                </StackPanel>
+            </Grid>
             <TextBlock Text="Adverts" Margin="0 10 0 10"/>
             <Border BorderThickness="1" BorderBrush="Black">
                 <StackPanel>
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="10*"/>
-                            <ColumnDefinition Width="4*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Advert title"/>
-                        <TextBlock Grid.Column="1" Text="Status"/>
-                        <TextBlock Grid.Column="2" Text="Repost"/>
-                    </Grid>
-                    <Grid>
+                        <ListView ItemsSource="{Binding advertList}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn DisplayMemberBinding="{Binding AdvertTitle}" Header="Advert title" Width="150"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Status}" Header="Status" Width="150"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Views}" Header="Views" Width="150"/>
+                                    <GridViewColumn Header="Repost?" Width="150">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding IsChecked}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
                     </Grid>
                 </StackPanel>
             </Border>
@@ -32,8 +48,8 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button Margin="20 10" Grid.Column="1" Content="Refresh" MouseUp="Refresh_MouseUp"/>
-                <Button Margin="20 10" Grid.Column="2" Content="Repost" MouseUp="Repost_MouseUp"/>
+                <Button Margin="20 10" Grid.Column="1" Content="Refresh" PreviewMouseLeftButtonUp="Refresh_MouseUp" IsEnabled="False" x:Name="refreshButton"/>
+                <Button Margin="20 10" Grid.Column="2" Content="Repost" PreviewMouseLeftButtonUp="Repost_MouseUp" IsEnabled="False" x:Name="repostButton"/>
             </Grid>
         </StackPanel>
     </Border>

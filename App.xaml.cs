@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using marktplaatsreposter.Properties;
 using Serilog;
 
 namespace marktplaatsreposter
@@ -19,8 +20,9 @@ namespace marktplaatsreposter
             // Create main window
             MainWindow window = new MainWindow
             {
-                Title = "Marktplaats Reposter"
             };
+            window.emailBox.Text = Settings.Default.email;
+            window.passwordBox.Password = Settings.Default.password;
             window.Show();
         }
     }
