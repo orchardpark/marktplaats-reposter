@@ -116,34 +116,9 @@ namespace marktplaatsreposter
             driver.Quit();
         }
 
-        public void CheckSignedIn()
-        {
-            if (isSignedIn) return;
-            driver.Navigate().GoToUrl(markpltaatsBasePath);
-            try
-            {
-                var loginElement = driver.FindElement(By.CssSelector("a[data-role=login]"));
-                isSignedIn = loginElement == null;
-            } catch(NoSuchElementException e)
-            {
-                isSignedIn = true;
-            }
-        }
+        
 
-        public void SignIn()
-        {
-            driver.Navigate().GoToUrl(markpltaatsBasePath);
-            var loginElement = driver.FindElement(By.CssSelector("a[data-role=login]"));
-            loginElement.Click();
-            var emailInputField = driver.FindElementByCSSWithTimeout("input[type=email]");
-            var passwordField = driver.FindElement(By.CssSelector("input[type=password]"));
-            emailInputField.TypeSlow(Settings.Default.email);
-            passwordField.TypeSlow(Settings.Default.password);
-            passwordField.SendKeys(Keys.Return);
-            var random = new Random();
-            Thread.Sleep(3500 + random.Next(100, 350));
-        }
-
+        #region HelperMethods
         private double GetPrice(string euroPrice)
         {
             var cultureInfo = new CultureInfo("nl");
@@ -370,7 +345,9 @@ namespace marktplaatsreposter
             driver.ScrollToElement(confirmPlaceAdButton);
             confirmPlaceAdButton.Click();
         }
+        #endregion
 
+        #region Public methods
         public List<MarktplaatsCompactAdvert> GetAdverts()
         {
             var adverts = new List<MarktplaatsCompactAdvert>();
@@ -440,5 +417,34 @@ namespace marktplaatsreposter
         {
             driver.Quit();
         }
+
+        public void CheckSignedIn()
+        {
+            if (isSignedIn) return;
+            driver.Navigate().GoToUrl(markpltaatsBasePath);
+            try
+            {
+                var loginElement = driver.FindElement(By.CssSelector("a[data-role=login]"));
+                isSignedIn = loginElement == null;
+            } catch(NoSuchElementException e)
+            {
+                isSignedIn = true;
+            }
+        }
+
+        public void SignIn()
+        {
+            driver.Navigate().GoToUrl(markpltaatsBasePath);
+            var loginElement = driver.FindElement(By.CssSelector("a[data-role=login]"));
+            loginElement.Click();
+            var emailInputField = driver.FindElementByCSSWithTimeout("input[type=email]");
+            var passwordField = driver.FindElement(By.CssSelector("input[type=password]"));
+            emailInputField.TypeSlow(Settings.Default.email);
+            passwordField.TypeSlow(Settings.Default.password);
+            driver.RandomSleep();
+            passwordField.SendKeys(Keys.Return);
+            driver.RandomSleep();
+        }
+        #endregion
     }
 }
