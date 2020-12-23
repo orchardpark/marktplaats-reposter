@@ -44,12 +44,17 @@
             </Border>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button Margin="20 10" Grid.Column="1" Content="Refresh" PreviewMouseLeftButtonUp="Refresh_MouseUp" IsEnabled="False" x:Name="refreshButton"/>
-                <Button Margin="20 10" Grid.Column="2" Content="Repost" PreviewMouseLeftButtonUp="Repost_MouseUp" IsEnabled="False" x:Name="repostButton"/>
+                <StackPanel Orientation="Horizontal">
+                    <Label VerticalAlignment="Center" Content="Status:"/>
+                    <TextBlock VerticalAlignment="Center" Text="{Binding botStatus, UpdateSourceTrigger=PropertyChanged}" Foreground="Orange"/>
+                </StackPanel>
+                <Button Margin="20 10" Grid.Column="2" Content="Refresh" PreviewMouseLeftButtonUp="Refresh_MouseUp" IsEnabled="False" x:Name="refreshButton"/>
+                <Button Margin="20 10" Grid.Column="3" Content="Repost" PreviewMouseLeftButtonUp="Repost_MouseUp" IsEnabled="False" x:Name="repostButton"/>
             </Grid>
         </StackPanel>
     </Border>

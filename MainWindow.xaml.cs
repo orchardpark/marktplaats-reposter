@@ -22,6 +22,7 @@ namespace marktplaatsreposter
     public partial class MainWindow : Window
     {
         public List<MarktplaatsGUIAdvert> advertList { get; set; }
+        public BotStatus botStatus { get; set; }
         private MarktplaatsBot bot;
         public MainWindow()
         {
@@ -33,12 +34,14 @@ namespace marktplaatsreposter
             advertList = new List<MarktplaatsGUIAdvert>
             {
             };
+            botStatus = BotStatus.NOT_SIGNED_IN;
 
             DataContext = this;
         }
 
         private void Refresh_MouseUp(object sender, MouseButtonEventArgs e)
         {
+            botStatus = BotStatus.PROCESSING;
             var adverts = bot.GetAdverts();
             advertList = adverts.Select(compact =>
             {
@@ -51,13 +54,14 @@ namespace marktplaatsreposter
                 };
             }).ToList();
             advertListView.ItemsSource = advertList;
-            advertListView.Items.Refresh();
             repostButton.IsEnabled = true;
+            botStatus = BotStatus.READY;
             e.Handled = true;
         }
 
         private void Repost_MouseUp(object sender, MouseButtonEventArgs e)
         {
+            botStatus = BotStatus.PROCESSING;
             advertList.ForEach(advert =>
             {
                 if (advert.IsChecked)
@@ -65,14 +69,17 @@ namespace marktplaatsreposter
                     bot.RePost(advert.AdvertTitle);
                 }
             });
+            botStatus = BotStatus.READY;
             e.Handled = true;
         }
 
         private void SignIn_MouseUp(object sender, MouseButtonEventArgs e)
         {
+            signInButton.IsEnabled = false;
+            botStatus = BotStatus.PROCESSING;
             bot.SignIn();
             refreshButton.IsEnabled = true;
-            signInButton.IsEnabled = false;
+            botStatus = BotStatus.READY;
             e.Handled = true;
         }
 
