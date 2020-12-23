@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:marktplaatsreposter"
         mc:Ignorable="d"
-        Title="Marktplaats Reposter" Height="450" Width="800"
+        Title="Marktplaats Reposter" Height="500" Width="800"
         Closing="Window_Closing"
         >
     <Border Padding="10">
@@ -22,14 +22,14 @@
             <TextBlock Text="Adverts" Margin="0 10 0 10"/>
             <Border BorderThickness="1" BorderBrush="Black">
                 <StackPanel>
-                    <Grid>
+                    <Grid Height="320">
                         <ListView ItemsSource="{Binding advertList}" x:Name="advertListView">
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn DisplayMemberBinding="{Binding AdvertTitle}" Header="Advert title" Width="150"/>
-                                    <GridViewColumn DisplayMemberBinding="{Binding Status}" Header="Status" Width="150"/>
-                                    <GridViewColumn DisplayMemberBinding="{Binding Views}" Header="Views" Width="150"/>
-                                    <GridViewColumn Header="Repost?" Width="150">
+                                    <GridViewColumn DisplayMemberBinding="{Binding AdvertTitle}" Header="Advert title" Width="400"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Status}" Header="Status" Width="200"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Views}" Header="Views" Width="50"/>
+                                    <GridViewColumn Header="Repost?" Width="50">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <CheckBox IsChecked="{Binding IsChecked}"/>
