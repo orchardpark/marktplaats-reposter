@@ -116,7 +116,7 @@ namespace marktplaatsreposter
             driver.Quit();
         }
 
-        private void CheckSignedIn()
+        public void CheckSignedIn()
         {
             if (isSignedIn) return;
             driver.Navigate().GoToUrl(markpltaatsBasePath);

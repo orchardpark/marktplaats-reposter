@@ -27,6 +27,7 @@ namespace marktplaatsreposter
         {
             InitializeComponent();
             bot = new MarktplaatsBot();
+            bot.CheckSignedIn();
 
             
             advertList = new List<MarktplaatsGUIAdvert>
@@ -49,6 +50,8 @@ namespace marktplaatsreposter
                     IsChecked = false
                 };
             }).ToList();
+            advertListView.ItemsSource = advertList;
+            advertListView.Items.Refresh();
             repostButton.IsEnabled = true;
             e.Handled = true;
         }

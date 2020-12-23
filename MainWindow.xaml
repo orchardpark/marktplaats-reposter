@@ -23,7 +23,7 @@
             <Border BorderThickness="1" BorderBrush="Black">
                 <StackPanel>
                     <Grid>
-                        <ListView ItemsSource="{Binding advertList}">
+                        <ListView ItemsSource="{Binding advertList}" x:Name="advertListView">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn DisplayMemberBinding="{Binding AdvertTitle}" Header="Advert title" Width="150"/>
