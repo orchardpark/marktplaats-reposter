@@ -4,6 +4,9 @@ Allows user to choose and repost ads on Marktplaats in order to move them to the
 ## Requirements
 Requires Chromedriver to be installed in `C:/Chromedriver/chromedriver.exe`
 
+## Build from source
+Open the project in 'Microsoft Visual Studio'. Then run 'Build solution (F6)'.
+
 ## Installation instructions
 Extract the release zip file in a directory of choosing. Next you can run the program by double clicking the 'marktplaatsreposter.exe' file.
 
