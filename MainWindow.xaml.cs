@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-
+using System.Threading;
 namespace marktplaatsreposter
 {
     /// <summary>
@@ -12,6 +12,7 @@ namespace marktplaatsreposter
     {
         private ObservableCollection<MarktplaatsGUIAdvert> advertList = new ObservableCollection<MarktplaatsGUIAdvert>();
         private MarktplaatsBot bot;
+        SynchronizationContext uiContext = SynchronizationContext.Current;
         public MainWindow()
         {
             InitializeComponent();
@@ -20,47 +21,52 @@ namespace marktplaatsreposter
 
             advertListView.ItemsSource = advertList;
             statusText.DataContext = bot;
+            signInButton.DataContext = bot;
+            refreshButton.DataContext = bot;
+            repostButton.DataContext = bot;
 
             DataContext = this;
         }
 
         private void RefreshClick(object sender, RoutedEventArgs e)
         {
-            refreshButton.IsEnabled = false;
-            var adverts = bot.GetAdverts();
-            adverts.ForEach(compact =>
-            {
-                advertList.Add( new MarktplaatsGUIAdvert()
-                {
-                    AdvertTitle = compact.AdvertTitle,
-                    Status = compact.Status,
-                    Views = compact.Views,
-                    IsChecked = false
-                });
-            });
-            advertListView.ItemsSource = advertList;
-            repostButton.IsEnabled = true;
-            refreshButton.IsEnabled = true;
+            new Thread(() =>
+           {
+               var adverts = bot.GetAdverts();
+               adverts.ForEach(compact =>
+               {
+                   uiContext.Send(x =>
+                      advertList.Add(new MarktplaatsGUIAdvert()
+                      {
+                          AdvertTitle = compact.AdvertTitle,
+                          Status = compact.Status,
+                          Views = compact.Views,
+                          IsChecked = false
+                      }), null
+                   );
+               });
+           }
+            ).Start();
         }
 
         private void RepostClick(object sender, RoutedEventArgs e)
         {
-            repostButton.IsEnabled = false;
-            advertList.ToList().ForEach(advert =>
-            {
-                if (advert.IsChecked)
-                {
-                    bot.RePost(advert.AdvertTitle);
-                }
-            });
-            repostButton.IsEnabled = true;
+            new Thread(() =>
+           {
+               advertList.ToList().ForEach(advert =>
+               {
+                   if (advert.IsChecked)
+                   {
+                       bot.RePost(advert.AdvertTitle);
+                   }
+               });
+           }
+            ).Start();
         }
 
         private void SignInClick(object sender, RoutedEventArgs e)
         {
-            signInButton.IsEnabled = false;
-            bot.SignIn();
-            refreshButton.IsEnabled = true;
+            new Thread(() => { bot.SignIn(); }).Start();
         }
 
         private void emailBox_KeyUp(object sender, KeyEventArgs e)

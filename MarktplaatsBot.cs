@@ -100,7 +100,7 @@ namespace marktplaatsreposter
 
         public MarktplaatsBot()
         {
-            status = BotStatus.READY;
+            Status = BotStatus.READY;
             var chromeDriverService = ChromeDriverService.CreateDefaultService("C:\\Chromedriver");
             chromeDriverService.HideCommandPromptWindow = true;
 
@@ -355,7 +355,7 @@ namespace marktplaatsreposter
         #region Public methods
         public List<MarktplaatsCompactAdvert> GetAdverts()
         {
-            status = BotStatus.PROCESSING;
+            Status = BotStatus.PROCESSING;
             var adverts = new List<MarktplaatsCompactAdvert>();
             CheckSignedIn();
             if (!isSignedIn)
@@ -388,14 +388,14 @@ namespace marktplaatsreposter
                 };
                 adverts.Add(compactAd);
             }
-            status = BotStatus.READY;
+            Status = BotStatus.READY;
 
             return adverts;
         }
 
         public void RePost(string adTitle)
         {
-            status = BotStatus.PROCESSING;
+            Status = BotStatus.PROCESSING;
             CheckSignedIn();
             if (!isSignedIn)
             {
@@ -420,7 +420,7 @@ namespace marktplaatsreposter
                     break;
                 }
             }
-            status = BotStatus.READY;
+            Status = BotStatus.READY;
         }
 
         public void Terminate()
@@ -436,7 +436,7 @@ namespace marktplaatsreposter
             {
                 var loginElement = driver.FindElement(By.CssSelector("a[data-role=login]"));
                 isSignedIn = loginElement == null;
-                if (!isSignedIn) status = BotStatus.NOT_SIGNED_IN;
+                if (!isSignedIn) Status = BotStatus.NOT_SIGNED_IN;
             } catch (NoSuchElementException e)
             {
                 isSignedIn = true;
@@ -445,7 +445,7 @@ namespace marktplaatsreposter
 
         public void SignIn()
         {
-            status = BotStatus.PROCESSING;
+            Status = BotStatus.PROCESSING;
             driver.Navigate().GoToUrl(markpltaatsBasePath);
             var loginElement = driver.FindElement(By.CssSelector("a[data-role=login]"));
             loginElement.Click();
@@ -456,7 +456,7 @@ namespace marktplaatsreposter
             driver.RandomSleep();
             passwordField.SendKeys(Keys.Return);
             driver.RandomSleep();
-            status = BotStatus.READY;
+            Status = BotStatus.READY;
         }
         #endregion
 
@@ -472,9 +472,38 @@ namespace marktplaatsreposter
                     status = value;
                     NotifyPropertyChanged("Status");
                     NotifyPropertyChanged("GetColorForStatus");
+                    NotifyPropertyChanged("SignOnEnabled");
+                    NotifyPropertyChanged("RefreshEnabled");
+                    NotifyPropertyChanged("RepostEnabled");
                 }
             }
         }
+
+        public bool SignOnEnabled
+        {
+            get
+            {
+                return (status == BotStatus.NOT_SIGNED_IN);
+            }
+        }
+
+        public bool RefreshEnabled
+        {
+            get
+            {
+                return status == BotStatus.READY;
+            }
+        }
+
+        public bool RepostEnabled
+        {
+            get
+            {
+                return status == BotStatus.READY;
+            }
+        }
+
+
         
         public Brush GetColorForStatus
         {
