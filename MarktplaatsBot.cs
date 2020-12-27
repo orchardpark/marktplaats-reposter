@@ -10,6 +10,8 @@ using OpenQA.Selenium.Interactions;
 using System.Globalization;
 using System.IO;
 using System.Net;
+using System.ComponentModel;
+using System.Windows.Media;
 
 namespace marktplaatsreposter
 {
@@ -57,16 +59,16 @@ namespace marktplaatsreposter
         public static void TypeSlow(this IWebElement e, String text)
         {
             var random = new Random();
-            foreach(char c in text){
-                e.SendKeys(""+c);
+            foreach (char c in text) {
+                e.SendKeys("" + c);
                 Thread.Sleep(random.Next(40, 200));
             }
         }
 
-        public static IWebElement FindElementByCSSWithTimeout(this IWebDriver driver,string CSSSelector)
+        public static IWebElement FindElementByCSSWithTimeout(this IWebDriver driver, string CSSSelector)
         {
             var timeout = TimeSpan.FromSeconds(10);
-            WebDriverWait wait = new WebDriverWait(driver,timeout);
+            WebDriverWait wait = new WebDriverWait(driver, timeout);
             var result = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector(CSSSelector)));
             return result;
         }
@@ -86,15 +88,15 @@ namespace marktplaatsreposter
             Thread.Sleep(random.Next(1000, 3000));
         }
     }
-    public class MarktplaatsBot
+    public class MarktplaatsBot : INotifyPropertyChanged
     {
 
         private const string markpltaatsBasePath = "https://www.marktplaats.nl";
         private const string marktplaatsAdOverviewPath = "https://www.marktplaats.nl/my-account/sell/index.html";
         private const string tmpImagePath = "images";
-
+        private BotStatus status;
         private bool isSignedIn;
-        private IWebDriver driver=null;
+        private IWebDriver driver = null;
 
         public MarktplaatsBot()
         {
@@ -116,9 +118,9 @@ namespace marktplaatsreposter
             driver.Quit();
         }
 
-        
 
-        #region HelperMethods
+
+        #region Helper methods
         private double GetPrice(string euroPrice)
         {
             var cultureInfo = new CultureInfo("nl");
@@ -138,7 +140,7 @@ namespace marktplaatsreposter
 
         private string CleanTxt(string s)
         {
-            return s.Replace(",", "").Replace("en", "").Replace("|","");
+            return s.Replace(",", "").Replace("en", "").Replace("|", "");
         }
 
         private double Similarity(string a, string b)
@@ -146,9 +148,9 @@ namespace marktplaatsreposter
             string[] wordsA = a.Split();
             string[] wordsB = b.Split();
             double count = 0;
-            foreach(string wordA in wordsA)
+            foreach (string wordA in wordsA)
             {
-                foreach(string wordB in wordsB)
+                foreach (string wordB in wordsB)
                 {
                     if (wordA.ToLower().Equals(wordB.ToLower()))
                         count++;
@@ -164,10 +166,10 @@ namespace marktplaatsreposter
             string[] wordsA = a.Split();
             string[] wordsB = b.Split();
             int totalDistance = 0;
-            foreach(string wordA in wordsA)
+            foreach (string wordA in wordsA)
             {
                 int minDistance = int.MaxValue;
-                foreach(string wordB in wordsB)
+                foreach (string wordB in wordsB)
                 {
                     int distance = LevenshteinDistance.Compute(wordA.ToLower(), wordB.ToLower());
                     minDistance = Math.Min(distance, minDistance);
@@ -191,7 +193,7 @@ namespace marktplaatsreposter
             int numImages = driver.FindElement(By.ClassName("carousel-scroll")).FindElements(By.TagName("a")).Count;
 
             // Download Images
-            for(int i=0; i<numImages; i++)
+            for (int i = 0; i < numImages; i++)
             {
                 // click on the i-th image
                 driver.RandomSleep();
@@ -256,7 +258,7 @@ namespace marktplaatsreposter
             int minDistance = int.MaxValue;
             string bestCat2Option = null;
             string bestCat3Option = null;
-            foreach(var subCatOption in subCatOptions)
+            foreach (var subCatOption in subCatOptions)
             {
                 if (subCatOption.Text.Equals("Kies subgroep"))
                     continue;
@@ -264,12 +266,12 @@ namespace marktplaatsreposter
                 subCategorySelect.SelectByText(subCatOption.Text);
                 var subSubCategorySelect = new SelectElement(driver.FindElementByCSSWithTimeout("#cat_sel_3"));
                 var subSubCatOptions = subSubCategorySelect.Options;
-                foreach(var subSubCatOption in subSubCatOptions)
+                foreach (var subSubCatOption in subSubCatOptions)
                 {
                     if (subSubCatOption.Text.Equals("Kies rubriek"))
                         continue;
                     var distancdeCat3 = Distance(advert.SubCategory, subSubCatOption.Text);
-                    if(minDistance > distancdeCat3 + distanceCat2)
+                    if (minDistance > distancdeCat3 + distanceCat2)
                     {
                         minDistance = distanceCat2 + distancdeCat3;
                         bestCat2Option = subCatOption.Text;
@@ -325,7 +327,7 @@ namespace marktplaatsreposter
 
             // fotos
             string[] images = Directory.GetFiles(tmpImagePath);
-            for(int i=0; i<advert.NumImages; i++)
+            for (int i = 0; i < advert.NumImages; i++)
             {
                 var fotoInput = driver.FindElement(By.Id($"uploader-container-{i}")).FindElement(By.CssSelector("input[type=\"file\"]"));
                 driver.ScrollToElement(fotoInput);
@@ -370,7 +372,7 @@ namespace marktplaatsreposter
 
             var adListingTable = driver.FindElementByCSSWithTimeout("#ad-listing-table-body");
             var adElements = adListingTable.FindElements(By.ClassName("ad-listing"));
-            foreach(var adElement in adElements)
+            foreach (var adElement in adElements)
             {
                 driver.ScrollToElement(adElement);
                 string title = adElement.FindElement(By.CssSelector(".description-title .title")).Text;
@@ -399,7 +401,7 @@ namespace marktplaatsreposter
             Thread.Sleep(5000);
             var adListingTable = driver.FindElement(By.Id("ad-listing-table-body"));
             var adElements = adListingTable.FindElements(By.ClassName("ad-listing"));
-            foreach(var adElement in adElements)
+            foreach (var adElement in adElements)
             {
 
                 string title = adElement.FindElement(By.CssSelector(".description-title .title")).Text;
@@ -429,7 +431,7 @@ namespace marktplaatsreposter
             {
                 var loginElement = driver.FindElement(By.CssSelector("a[data-role=login]"));
                 isSignedIn = loginElement == null;
-            } catch(NoSuchElementException e)
+            } catch (NoSuchElementException e)
             {
                 isSignedIn = true;
             }
@@ -447,6 +449,49 @@ namespace marktplaatsreposter
             driver.RandomSleep();
             passwordField.SendKeys(Keys.Return);
             driver.RandomSleep();
+        }
+        #endregion
+
+        #region Notify
+
+        public BotStatus Status
+        {
+            get { return status; }
+            set
+            {
+                if(status!= value)
+                {
+                    status = value;
+                    NotifyPropertyChanged("Status");
+                    NotifyPropertyChanged("GetColorForStatus");
+                }
+            }
+        }
+        
+        public Brush GetColorForStatus
+        {
+            get
+            {
+                switch (status)
+                {
+                    case BotStatus.NOT_SIGNED_IN:
+                        return new SolidColorBrush(Color.FromRgb(255, 127, 80)); // Orange
+                    case BotStatus.PROCESSING:
+                        return new SolidColorBrush(Color.FromRgb(255, 0, 0)); // Red
+                    case BotStatus.READY:
+                        return new SolidColorBrush(Color.FromRgb(34, 139, 34)); // Green
+                    default:
+                        return new SolidColorBrush(Color.FromRgb(0, 0, 0)); // Black
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void NotifyPropertyChanged(string propName)
+        {
+            if (this.PropertyChanged != null)
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
         }
         #endregion
     }

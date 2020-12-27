@@ -24,7 +24,6 @@ namespace marktplaatsreposter
     {
         private ObservableCollection<MarktplaatsGUIAdvert> advertList = new ObservableCollection<MarktplaatsGUIAdvert>();
         private MarktplaatsBot bot;
-        public BotStatus botStatus { get; set; }
         public MainWindow()
         {
             InitializeComponent();
@@ -32,7 +31,8 @@ namespace marktplaatsreposter
             bot.CheckSignedIn();
 
             advertListView.ItemsSource = advertList;
-            botStatus = BotStatus.NOT_SIGNED_IN;
+            statusText.DataContext = bot;
+            bot.Status = BotStatus.NOT_SIGNED_IN;
 
             DataContext = this;
         }
@@ -40,7 +40,7 @@ namespace marktplaatsreposter
         private void RefreshClick(object sender, RoutedEventArgs e)
         {
             refreshButton.IsEnabled = false;
-            botStatus = BotStatus.PROCESSING;
+            bot.Status = BotStatus.PROCESSING;
             var adverts = bot.GetAdverts();
             adverts.ForEach(compact =>
             {
@@ -54,14 +54,14 @@ namespace marktplaatsreposter
             });
             advertListView.ItemsSource = advertList;
             repostButton.IsEnabled = true;
-            botStatus = BotStatus.READY;
+            bot.Status = BotStatus.READY;
             refreshButton.IsEnabled = true;
         }
 
         private void RepostClick(object sender, RoutedEventArgs e)
         {
             repostButton.IsEnabled = false;
-            botStatus = BotStatus.PROCESSING;
+            bot.Status = BotStatus.PROCESSING;
             advertList.ToList().ForEach(advert =>
             {
                 if (advert.IsChecked)
@@ -69,17 +69,17 @@ namespace marktplaatsreposter
                     bot.RePost(advert.AdvertTitle);
                 }
             });
-            botStatus = BotStatus.READY;
+            bot.Status = BotStatus.READY;
             repostButton.IsEnabled = true;
         }
 
         private void SignInClick(object sender, RoutedEventArgs e)
         {
             signInButton.IsEnabled = false;
-            botStatus = BotStatus.PROCESSING;
+            bot.Status = BotStatus.PROCESSING;
             bot.SignIn();
             refreshButton.IsEnabled = true;
-            botStatus = BotStatus.READY;
+            bot.Status = BotStatus.READY;
         }
 
         private void emailBox_KeyUp(object sender, KeyEventArgs e)

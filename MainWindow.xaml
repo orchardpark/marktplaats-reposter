@@ -51,7 +51,7 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal">
                     <Label VerticalAlignment="Center" Content="Status:"/>
-                    <TextBlock VerticalAlignment="Center" Text="{Binding botStatus, UpdateSourceTrigger=PropertyChanged}" Foreground="Orange"/>
+                    <TextBlock VerticalAlignment="Center" Text="{Binding Status, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding GetColorForStatus}" x:Name="statusText"/>
                 </StackPanel>
                 <Button Margin="20 10" Grid.Column="2" Content="Refresh" Click="RefreshClick" IsEnabled="False" x:Name="refreshButton"/>
                 <Button Margin="20 10" Grid.Column="3" Content="Repost" Click="RepostClick" IsEnabled="False" x:Name="repostButton"/>
