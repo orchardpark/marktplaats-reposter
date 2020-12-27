@@ -16,7 +16,7 @@
                     <TextBox Width="100" x:Name="emailBox" KeyUp="emailBox_KeyUp"/>
                     <Label Content="Password"/>
                     <PasswordBox Width="100" x:Name="passwordBox" KeyUp="passwordBox_KeyUp"/>
-                    <Button Content="Sign In" Width="100" PreviewMouseLeftButtonUp="SignIn_MouseUp" x:Name="signInButton"/>
+                    <Button Content="Sign In" Width="100" Click="SignInClick" x:Name="signInButton"/>
                 </StackPanel>
             </Grid>
             <TextBlock Text="Adverts" Margin="0 10 0 10"/>
@@ -53,8 +53,8 @@
                     <Label VerticalAlignment="Center" Content="Status:"/>
                     <TextBlock VerticalAlignment="Center" Text="{Binding botStatus, UpdateSourceTrigger=PropertyChanged}" Foreground="Orange"/>
                 </StackPanel>
-                <Button Margin="20 10" Grid.Column="2" Content="Refresh" PreviewMouseLeftButtonUp="Refresh_MouseUp" IsEnabled="False" x:Name="refreshButton"/>
-                <Button Margin="20 10" Grid.Column="3" Content="Repost" PreviewMouseLeftButtonUp="Repost_MouseUp" IsEnabled="False" x:Name="repostButton"/>
+                <Button Margin="20 10" Grid.Column="2" Content="Refresh" Click="RefreshClick" IsEnabled="False" x:Name="refreshButton"/>
+                <Button Margin="20 10" Grid.Column="3" Content="Repost" Click="RepostClick" IsEnabled="False" x:Name="repostButton"/>
             </Grid>
         </StackPanel>
     </Border>

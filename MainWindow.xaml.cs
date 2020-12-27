@@ -22,8 +22,8 @@ namespace marktplaatsreposter
     public partial class MainWindow : Window
     {
         public List<MarktplaatsGUIAdvert> advertList { get; set; }
-        public BotStatus botStatus { get; set; }
         private MarktplaatsBot bot;
+        public BotStatus botStatus { get; set; }
         public MainWindow()
         {
             InitializeComponent();
@@ -39,8 +39,9 @@ namespace marktplaatsreposter
             DataContext = this;
         }
 
-        private void Refresh_MouseUp(object sender, MouseButtonEventArgs e)
+        private void RefreshClick(object sender, RoutedEventArgs e)
         {
+            refreshButton.IsEnabled = false;
             botStatus = BotStatus.PROCESSING;
             var adverts = bot.GetAdverts();
             advertList = adverts.Select(compact =>
@@ -56,11 +57,12 @@ namespace marktplaatsreposter
             advertListView.ItemsSource = advertList;
             repostButton.IsEnabled = true;
             botStatus = BotStatus.READY;
-            e.Handled = true;
+            refreshButton.IsEnabled = true;
         }
 
-        private void Repost_MouseUp(object sender, MouseButtonEventArgs e)
+        private void RepostClick(object sender, RoutedEventArgs e)
         {
+            repostButton.IsEnabled = false;
             botStatus = BotStatus.PROCESSING;
             advertList.ForEach(advert =>
             {
@@ -70,17 +72,16 @@ namespace marktplaatsreposter
                 }
             });
             botStatus = BotStatus.READY;
-            e.Handled = true;
+            repostButton.IsEnabled = true;
         }
 
-        private void SignIn_MouseUp(object sender, MouseButtonEventArgs e)
+        private void SignInClick(object sender, RoutedEventArgs e)
         {
             signInButton.IsEnabled = false;
             botStatus = BotStatus.PROCESSING;
             bot.SignIn();
             refreshButton.IsEnabled = true;
             botStatus = BotStatus.READY;
-            e.Handled = true;
         }
 
         private void emailBox_KeyUp(object sender, KeyEventArgs e)
