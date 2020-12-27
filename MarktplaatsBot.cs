@@ -291,6 +291,8 @@ namespace marktplaatsreposter
             driver.SwitchTo().ParentFrame();
 
             // write price
+            var priceSelector = new SelectElement(driver.FindElementByCSSWithTimeout("#syi-price-type-dropdown > div > select"));
+            priceSelector.SelectByValue("FAST_BID");
             var price = driver.FindElementByCSSWithTimeout("#syi-bidding-price > input");
             driver.ScrollToElement(price);
             price.TypeSlow(advert.Price.ToString());
