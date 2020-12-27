@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Dynamic;
-using System.Text;
+﻿using System.ComponentModel;
 
 namespace marktplaatsreposter
-{   
+{
     public enum ShippingDetailType
     {
         Delivery,
