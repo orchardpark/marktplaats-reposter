@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace marktplaatsreposter
     /// </summary>
     public partial class MainWindow : Window
     {
-        public List<MarktplaatsGUIAdvert> advertList { get; set; }
+        private ObservableCollection<MarktplaatsGUIAdvert> advertList = new ObservableCollection<MarktplaatsGUIAdvert>();
         private MarktplaatsBot bot;
         public BotStatus botStatus { get; set; }
         public MainWindow()
@@ -30,10 +31,7 @@ namespace marktplaatsreposter
             bot = new MarktplaatsBot();
             bot.CheckSignedIn();
 
-            
-            advertList = new List<MarktplaatsGUIAdvert>
-            {
-            };
+            advertListView.ItemsSource = advertList;
             botStatus = BotStatus.NOT_SIGNED_IN;
 
             DataContext = this;
@@ -44,16 +42,16 @@ namespace marktplaatsreposter
             refreshButton.IsEnabled = false;
             botStatus = BotStatus.PROCESSING;
             var adverts = bot.GetAdverts();
-            advertList = adverts.Select(compact =>
+            adverts.ForEach(compact =>
             {
-                return new MarktplaatsGUIAdvert()
+                advertList.Add( new MarktplaatsGUIAdvert()
                 {
                     AdvertTitle = compact.AdvertTitle,
                     Status = compact.Status,
                     Views = compact.Views,
                     IsChecked = false
-                };
-            }).ToList();
+                });
+            });
             advertListView.ItemsSource = advertList;
             repostButton.IsEnabled = true;
             botStatus = BotStatus.READY;
@@ -64,7 +62,7 @@ namespace marktplaatsreposter
         {
             repostButton.IsEnabled = false;
             botStatus = BotStatus.PROCESSING;
-            advertList.ForEach(advert =>
+            advertList.ToList().ForEach(advert =>
             {
                 if (advert.IsChecked)
                 {
