@@ -2,7 +2,8 @@
 Allows user to choose and repost ads on Marktplaats in order to move them to the top.
 
 ## Requirements
-Requires [Chromedriver](https://chromedriver.chromium.org/) to be installed in `C:/Chromedriver/chromedriver.exe`
+* Windows 10 64bit
+* Requires [Chromedriver](https://chromedriver.chromium.org/) to be installed in `C:/Chromedriver/chromedriver.exe` corresponding to the [Chrome](https://www.google.com/chrome/) version installed on the system.
 
 ## Build from source
 Open the project in [Microsoft Visual Studio](https://visualstudio.microsoft.com/downloads/). Then run 'Build solution (F6)'.
