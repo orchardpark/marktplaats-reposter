@@ -144,22 +144,6 @@ namespace marktplaatsreposter
             return s.Replace(",", "").Replace("en", "").Replace("|", "");
         }
 
-        private double Similarity(string a, string b)
-        {
-            string[] wordsA = a.Split();
-            string[] wordsB = b.Split();
-            double count = 0;
-            foreach (string wordA in wordsA)
-            {
-                foreach (string wordB in wordsB)
-                {
-                    if (wordA.ToLower().Equals(wordB.ToLower()))
-                        count++;
-                }
-            }
-            return count / Math.Max(a.Length, b.Length);
-        }
-
         private int Distance(string a, string b)
         {
             a = CleanTxt(a);
