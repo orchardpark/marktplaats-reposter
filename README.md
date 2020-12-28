@@ -1,7 +1,7 @@
 # Marktplaats Reposter
 Allows user to choose and repost ads on Marktplaats in order to move them to the top.
 
-![alt text](https://github.com/orchardpark/marktplaats-reposter/blob/master/example.png?raw=true)
+![Image](example.PNG)
 
 
 ## Requirements
