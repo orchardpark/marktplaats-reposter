@@ -30,6 +30,7 @@ namespace marktplaatsreposter
 
         private void RefreshClick(object sender, RoutedEventArgs e)
         {
+            advertList.Clear();
             new Thread(() =>
            {
                var adverts = bot.GetAdverts();
