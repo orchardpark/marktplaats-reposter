@@ -1,4 +1,6 @@
 # Marktplaats Reposter
+Warning: Use at your own risk, marktplaats may change their web application causing this application to fail.
+
 Allows user to choose and repost ads on Marktplaats in order to move them to the top.
 
 ![Image](example.PNG)

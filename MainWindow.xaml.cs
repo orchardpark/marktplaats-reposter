@@ -41,7 +41,8 @@ namespace marktplaatsreposter
                           AdvertTitle = compact.AdvertTitle,
                           Status = compact.Status,
                           Views = compact.Views,
-                          IsChecked = false
+                          IsChecked = false,
+                          DeleteOldAd = false
                       }), null
                    );
                });
@@ -57,7 +58,9 @@ namespace marktplaatsreposter
                {
                    if (advert.IsChecked)
                    {
-                       bot.RePost(advert.AdvertTitle);
+                       bot.RePost(advert.AdvertTitle, advert.DeleteOldAd);
+                       advert.IsChecked = false;
+                       advert.DeleteOldAd = false;
                    }
                });
            }

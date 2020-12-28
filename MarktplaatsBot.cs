@@ -286,7 +286,19 @@ namespace marktplaatsreposter
             // click next
             driver.FindElementByCSSWithTimeout("#category-selection-submit").Click();
 
+            // fotos
+            string[] images = Directory.GetFiles(tmpImagePath);
+            for (int i = 0; i < advert.NumImages; i++)
+            {
+                var fotoInput = driver.FindElementByCSSWithTimeout($"#uploader-container-{i}").FindElement(By.CssSelector("input[type=\"file\"]"));
+                driver.ScrollToElement(fotoInput);
+                var imageFile = images[i];
+                string fullPath = Path.Combine(Directory.GetCurrentDirectory(), imageFile);
+                fotoInput.SendKeys(fullPath);
+                driver.RandomSleep();
+            }
             // write description
+            driver.RandomSleep();
             driver.SwitchTo().Frame("description_nl-NL_ifr");
             var description = driver.FindElementByCSSWithTimeout("#tinymce");
             driver.ScrollToElement(description);
@@ -295,7 +307,8 @@ namespace marktplaatsreposter
 
             // write price
             var priceSelector = new SelectElement(driver.FindElementByCSSWithTimeout("#syi-price-type-dropdown > div > select"));
-            priceSelector.SelectByValue("FAST_BID");
+            priceSelector.SelectByText("Vraagprijs");
+            driver.RandomSleep();
             var price = driver.FindElementByCSSWithTimeout("#syi-bidding-price > input");
             driver.ScrollToElement(price);
             price.TypeSlow(advert.Price.ToString());
@@ -326,17 +339,7 @@ namespace marktplaatsreposter
             shippingPriceInput.Clear();
             shippingPriceInput.TypeSlow(advert.ShippingPrice.ToString());
 
-            // fotos
-            string[] images = Directory.GetFiles(tmpImagePath);
-            for (int i = 0; i < advert.NumImages; i++)
-            {
-                var fotoInput = driver.FindElement(By.Id($"uploader-container-{i}")).FindElement(By.CssSelector("input[type=\"file\"]"));
-                driver.ScrollToElement(fotoInput);
-                var imageFile = images[i];
-                string fullPath = Path.Combine(Directory.GetCurrentDirectory(), imageFile);
-                fotoInput.SendKeys(fullPath);
-                driver.RandomSleep();
-            }
+            
 
             // select free option
             var freeOption = driver.FindElementByCSSWithTimeout("#js-products").FindElement(By.CssSelector("div[data-val=\"FREE\"]"));
@@ -393,7 +396,7 @@ namespace marktplaatsreposter
             return adverts;
         }
 
-        public void RePost(string adTitle)
+        public void RePost(string adTitle, bool deleteOldAd)
         {
             Status = BotStatus.PROCESSING;
             CheckSignedIn();
@@ -415,7 +418,8 @@ namespace marktplaatsreposter
                 if (title.Equals(adTitle))
                 {
                     var fullAdvert = DownloadFullAdvert(adURL, title);
-                    DeleteAdvertisement(adURL);
+                    if(deleteOldAd)
+                        DeleteAdvertisement(adURL);
                     PostNewAdvertisement(fullAdvert);
                     break;
                 }

@@ -24,7 +24,7 @@ namespace marktplaatsreposter
         [Test]
         public void RePost()
         {
-            bot.RePost("Adname");
+            bot.RePost("Adname", false);
         }
     }
 }

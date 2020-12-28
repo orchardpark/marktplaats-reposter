@@ -35,6 +35,7 @@ namespace marktplaatsreposter
         private string status;
         private bool isChecked;
         private string views;
+        private bool deleteOldAd;
         public string AdvertTitle
         {
             get
@@ -88,6 +89,22 @@ namespace marktplaatsreposter
                 {
                     views = value;
                     NotifyPropertyChanged("Views");
+                }
+            }
+        }
+
+        public bool DeleteOldAd
+        {
+            get
+            {
+                return deleteOldAd;
+            }
+            set
+            {
+                if(deleteOldAd != value)
+                {
+                    deleteOldAd = value;
+                    NotifyPropertyChanged("DeleteOldAd");
                 }
             }
         }

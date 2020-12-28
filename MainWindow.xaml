@@ -26,13 +26,20 @@
                         <ListView ItemsSource="{Binding advertList}" x:Name="advertListView">
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn DisplayMemberBinding="{Binding AdvertTitle}" Header="Advert title" Width="400"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding AdvertTitle}" Header="Advert title" Width="390"/>
                                     <GridViewColumn DisplayMemberBinding="{Binding Status}" Header="Status" Width="200"/>
                                     <GridViewColumn DisplayMemberBinding="{Binding Views}" Header="Views" Width="50"/>
                                     <GridViewColumn Header="Repost?" Width="50">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <CheckBox IsChecked="{Binding IsChecked}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="DeleteOldAd?" Width="80">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding DeleteOldAd}"/>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
