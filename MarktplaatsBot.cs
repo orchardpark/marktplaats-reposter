@@ -186,7 +186,7 @@ namespace marktplaatsreposter
             driver.Navigate().GoToUrl(adURL);
             double price = GetPrice(driver.FindElementByCSSWithTimeout("span[data-value=\"price\"]").Text);
             double shippingPrice = GetPrice(driver.FindElementByCSSWithTimeout(".shipping-details-value.price").Text);
-            string description = driver.FindElementByCSSWithTimeout("#vip-description").Text;
+            string description = driver.FindElementByCSSWithTimeout("#vip-ad-description").Text;
             ShippingDetailType shippingDetails = GetShippingDetails(driver.FindElementByCSSWithTimeout(".shipping-details-value").Text);
             IWebElement categoryDescription = driver.FindElementByCSSWithTimeout(".category-description");
             string category = categoryDescription.FindElements(By.TagName("p"))[0].Text;
