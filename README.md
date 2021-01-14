@@ -1,5 +1,5 @@
 # Marktplaats Reposter
-Warning: Use at your own risk, marktplaats may change their web application causing this application to fail.
+Warning: Use at your own risk, marktplaats may change their web application causing this application to fail. Note that only the master branch will be guaranteed to be up to date.
 
 Allows user to choose and repost ads on Marktplaats in order to move them to the top.
 
