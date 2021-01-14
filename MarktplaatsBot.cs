@@ -84,7 +84,7 @@ namespace marktplaatsreposter
                 actions.Perform();
             } catch(WebDriverException e)
             {
-                Log.Debug("Could not scroll to element.")
+                Log.Debug("Could not scroll to element.");
             }
         }
 
