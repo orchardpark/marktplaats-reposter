@@ -61,7 +61,7 @@ namespace marktplaatsreposter
             var random = new Random();
             foreach (char c in text) {
                 e.SendKeys("" + c);
-                Thread.Sleep(random.Next(40, 200));
+                Thread.Sleep(random.Next(40, 100));
             }
         }
 
@@ -75,11 +75,17 @@ namespace marktplaatsreposter
 
         public static void ScrollToElement(this IWebDriver driver, IWebElement element)
         {
-            var random = new Random();
-            Thread.Sleep(random.Next(150, 400));
-            Actions actions = new Actions(driver);
-            actions.MoveToElement(element);
-            actions.Perform();
+            try
+            {
+                var random = new Random();
+                Thread.Sleep(random.Next(50, 150));
+                Actions actions = new Actions(driver);
+                actions.MoveToElement(element);
+                actions.Perform();
+            } catch(WebDriverException e)
+            {
+                Log.Debug("Could not scroll to element.")
+            }
         }
 
         public static void RandomSleep(this IWebDriver e)
