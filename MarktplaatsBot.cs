@@ -253,7 +253,6 @@ namespace marktplaatsreposter
             {
                 if (subCatOption.Text.Equals("Kies subgroep") || subCatOption.Text.Equals("Kies categorie"))
                     continue;
-                var distanceCat2 = Distance(advert.SubCategory, subCatOption.Text);
                 subCategorySelect.SelectByText(subCatOption.Text);
                 var subSubCategorySelect = new SelectElement(driver.FindElementByCSSWithTimeout("#cat_sel_3"));
                 var subSubCatOptions = subSubCategorySelect.Options;
@@ -262,9 +261,9 @@ namespace marktplaatsreposter
                     if (subSubCatOption.Text.Equals("Kies rubriek"))
                         continue;
                     var distancdeCat3 = Distance(advert.SubCategory, subSubCatOption.Text);
-                    if (minDistance > distancdeCat3 + distanceCat2)
+                    if (minDistance > distancdeCat3)
                     {
-                        minDistance = distanceCat2 + distancdeCat3;
+                        minDistance = distancdeCat3;
                         bestCat2Option = subCatOption.Text;
                         bestCat3Option = subSubCatOption.Text;
                     }
