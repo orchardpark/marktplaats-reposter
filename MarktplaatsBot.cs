@@ -245,7 +245,7 @@ namespace marktplaatsreposter
             string bestCat3Option = null;
             foreach (var subCatOption in subCatOptions)
             {
-                if (subCatOption.Text.Equals("Kies subgroep"))
+                if (subCatOption.Text.Equals("Kies subgroep") || subCatOption.Text.Equals("Kies categorie"))
                     continue;
                 var distanceCat2 = Distance(advert.SubCategory, subCatOption.Text);
                 subCategorySelect.SelectByText(subCatOption.Text);
