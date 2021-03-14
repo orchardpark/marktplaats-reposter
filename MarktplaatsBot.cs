@@ -335,6 +335,11 @@ namespace marktplaatsreposter
             driver.ScrollToElement(freeOption);
             freeOption.Click();
 
+            // Enable bidding
+            var biddingSwitch = driver.FindElementByCSSWithTimeout("#syi-bidding-switch");
+            biddingSwitch.Click();
+
+
 
             // Post ad
 
