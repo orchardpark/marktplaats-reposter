@@ -82,7 +82,8 @@ namespace marktplaatsreposter
                 Actions actions = new Actions(driver);
                 actions.MoveToElement(element);
                 actions.Perform();
-            } catch(WebDriverException e)
+            }
+            catch (WebDriverException)
             {
                 Log.Debug("Could not scroll to element.");
             }
@@ -181,31 +182,41 @@ namespace marktplaatsreposter
             IWebElement categoryDescription = driver.FindElementByCSSWithTimeout(".category-description");
             string category = categoryDescription.FindElements(By.TagName("p"))[0].Text;
             string subCategory = categoryDescription.FindElements(By.TagName("p"))[1].Text;
-            int numImages = driver.FindElement(By.ClassName("carousel-scroll")).FindElements(By.TagName("a")).Count;
+            int numImages = 0;
+
+            // click on first image
+            driver.RandomSleep();
+            driver.FindElement(By.ClassName("carousel-scroll")).FindElements(By.TagName("a"))[0].Click();
+            driver.RandomSleep();
+            driver.FindElement(By.Id("vip-image-viewer")).Click();
 
             // Download Images
-            for (int i = 0; i < numImages; i++)
+            while (true)
             {
-                // click on the i-th image
-                driver.RandomSleep();
-                driver.FindElement(By.ClassName("carousel-scroll")).FindElements(By.TagName("a"))[i].Click();
-                // click on main image
-                driver.RandomSleep();
-                driver.FindElement(By.Id("vip-image-viewer")).Click();
-                // download image
                 var carouselList = driver.FindElementByCSSWithTimeout(".mp-Carousel-list");
-                string imageSrc = carouselList.FindElements(By.TagName("img"))[i].GetAttribute("src");
+                string imageSrc = carouselList.FindElements(By.TagName("img"))[numImages].GetAttribute("src");
                 if (!Directory.Exists(tmpImagePath))
                 {
                     Directory.CreateDirectory(tmpImagePath);
                 }
                 using (WebClient client = new WebClient())
                 {
-                    client.DownloadFile(new Uri(imageSrc), $"{tmpImagePath}\\image_{i}.png");
+                    client.DownloadFile(new Uri(imageSrc), $"{tmpImagePath}\\image_{numImages}.png");
                 }
-                // escape out
-                driver.FindElementByCSSWithTimeout(".mp-Dialog-close").Click();
+                // Move to next image
+                numImages++;
+                try
+                {
+                    driver.FindElementByCSSWithTimeout("#fullscreen-image-dialog > div.mp-Dialog-content > div:nth-child(2) > div > a.mp-Carousel-nav--right.mp-Button.mp-Button--round > span").Click();
+                    driver.RandomSleep();
+                }
+                catch(WebDriverTimeoutException)
+                {
+                    break;
+                }
             }
+            // escape out
+            driver.FindElementByCSSWithTimeout(".mp-Dialog-close").Click();
 
             var fullAdvert = new MarktplaatsFullAdvert
             {
@@ -261,6 +272,7 @@ namespace marktplaatsreposter
                     if (subSubCatOption.Text.Equals("Kies rubriek"))
                         continue;
                     var distancdeCat3 = Distance(advert.SubCategory, subSubCatOption.Text);
+                    Console.WriteLine($"Ad: {advert.SubCategory} subSubCategory: {subSubCatOption.Text} -- Distance: {distancdeCat3}");
                     if (minDistance > distancdeCat3)
                     {
                         minDistance = distancdeCat3;
@@ -335,14 +347,7 @@ namespace marktplaatsreposter
             driver.ScrollToElement(freeOption);
             freeOption.Click();
 
-            // Enable bidding
-            var biddingSwitch = driver.FindElementByCSSWithTimeout("#syi-bidding-switch");
-            biddingSwitch.Click();
-
-
-
             // Post ad
-
             var confirmPlaceAdButton = driver.FindElementByCSSWithTimeout("#syi-place-ad-button > span");
             driver.ScrollToElement(confirmPlaceAdButton);
             confirmPlaceAdButton.Click();
